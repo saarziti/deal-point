@@ -1,24 +1,14 @@
-import './App.css';
-import Pages from '@/pages/index.jsx';
-import { Toaster } from '@/components/ui/toaster';
-import Login from '@/pages/Login'; // הוספנו את דף ההתחברות
-import { useState } from 'react';
+import React, { useEffect, useState } from "react";
+import Pages from "./pages";
+import LoginPage from "./pages/LoginPage"; // ודא שזה הנתיב הנכון
 
-function App() {
-  const [isLoggedIn, setIsLoggedIn] = useState(false); // האם המשתמש מחובר
+export default function App() {
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
 
-  return (
-    <>
-      {!isLoggedIn ? (
-        <Login onLogin={() => setIsLoggedIn(true)} />
-      ) : (
-        <>
-          <Pages />
-          <Toaster />
-        </>
-      )}
-    </>
-  );
+  useEffect(() => {
+    const logged = localStorage.getItem("isLoggedIn");
+    if (logged === "true") setIsLoggedIn(true);
+  }, []);
+
+  return isLoggedIn ? <Pages /> : <LoginPage onLogin={setIsLoggedIn} />;
 }
-
-export default App;
